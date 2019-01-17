@@ -1,0 +1,24 @@
+let g:molokai_original = 1
+"nnoremap <Tab> :bnext<CR>
+set background=dark
+if &term =~ '256color'
+  set t_ut=
+endif
+let g:pymode_lint_write = 0
+autocmd FileType html :setlocal sw=2 ts=2 sts=2 " Two spaces for HTML files "
+autocmd FileType js :setlocal sw=2 ts=2 sts=2 " Two spaces for JS files "
+autocmd BufNewFile,BufRead *.jade set filetype=jade
+autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
+set tabstop=2
+set shiftwidth=2
+colorscheme molokai
+let g:indent_guides_enable_on_vim_startup=0
+set foldlevel=9
+let g:neocomplcache_temporary_dir="$HOME/.vim/tmp/neocomplcache"
+set nospell
+map <F1> <Esc>
+imap <F1> <Esc>
+set expandtab
+set softtabstop=4
+filetype indent on
+set clipboard=unnamedplus
