@@ -7,6 +7,10 @@ endif
 let g:pymode_lint_write = 0
 autocmd FileType html :setlocal sw=2 ts=2 sts=2 " Two spaces for HTML files "
 autocmd FileType js :setlocal sw=2 ts=2 sts=2 " Two spaces for JS files "
+autocmd FileType c :setlocal sw=2 ts=2 sts=2 " Two spaces for C files "
+autocmd FileType cpp :setlocal sw=2 ts=2 sts=2 " Two spaces for CPP files "
+autocmd FileType go :setlocal sw=2 ts=2 sts=2 " Two spaces for go files "
+autocmd FileType tex :setlocal sw=2 ts=2 sts=2 " Two spaces for go files "
 autocmd BufNewFile,BufRead *.jade set filetype=jade
 autocmd BufNewFile,BufReadPost *.ino,*.pde set filetype=cpp
 set tabstop=2
@@ -22,3 +26,5 @@ set expandtab
 set softtabstop=4
 filetype indent on
 set clipboard=unnamedplus
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
