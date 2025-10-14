@@ -33,6 +33,11 @@ echo "Linking hyprpaper configuration..."
 ln -sf "$DOTFILES_DIR/hyprland/hyprpaper.conf" "$HOME/.config/hypr/hyprpaper.conf"
 echo "  ✓ ~/.config/hypr/hyprpaper.conf -> $DOTFILES_DIR/hyprland/hyprpaper.conf"
 
+# Hyprpaper configuration
+echo "Linking hyprlock configuration..."
+ln -sf "$DOTFILES_DIR/hyprland/hyprlock.conf" "$HOME/.config/hypr/hyprlock.conf"
+echo "  ✓ ~/.config/hypr/hyprlock.conf -> $DOTFILES_DIR/hyprland/hyprlock.conf"
+
 # Waybar configuration
 echo "Linking waybar configuration..."
 mkdir -p "$HOME/.config/waybar"
