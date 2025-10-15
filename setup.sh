@@ -55,8 +55,14 @@ done
 # Fuzzel configuration
 mkdir -p $HOME/.config/fuzzel
 ln -sf "$DOTFILES_DIR/hyprland/fuzzel/fuzzel.ini" "$HOME/.config/fuzzel/fuzzel.ini"
-echo "Linking hyprlock configuration..."
+echo "Linking fuzzel configuration..."
 echo "  ✓ ~/.config/fuzzel/fuzzel.ini -> $DOTFILES_DIR/hyprland/fuzzel/fuzzel.ini"
+
+# Fish configuration
+echo "Linking fish configuration..."
+mkdir -p "$HOME/.config/fish"
+ln -sf "$DOTFILES_DIR/fish/config.fish" "$HOME/.config/fish/config.fish"
+echo "  ✓ ~/.config/fish/config.fish -> $DOTFILES_DIR/fish/config.fish"
 
 echo ""
 echo "Dotfiles setup complete!"

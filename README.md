@@ -42,6 +42,49 @@ sudo pacman -S pavucontrol wireplumber pipewire
 
 ## Installation
 
+### Using Nix Home Manager (Recommended)
+
+This is the recommended method for reproducible, declarative environment management.
+
+1. **Install Nix** (if not already installed):
+
+```bash
+sh <(curl -L https://nixos.org/nix/install) --daemon
+```
+
+2. **Enable flakes:**
+
+Add to `~/.config/nix/nix.conf` (create if it doesn't exist):
+```
+experimental-features = nix-command flakes
+```
+
+Or system-wide in `/etc/nix/nix.conf` (requires sudo).
+
+3. **Clone and activate:**
+
+```bash
+git clone https://github.com/vasumv/dotfiles ~/dotfiles
+cd ~/dotfiles
+nix run home-manager/master -- switch --flake .#vasu
+```
+
+This will:
+- Install all required packages (Hyprland, Waybar, fonts, etc.)
+- Create symbolic links for all configuration files
+- Set up your entire environment in one command
+
+4. **Update after making changes:**
+
+```bash
+cd ~/dotfiles
+home-manager switch --flake .#vasu
+```
+
+### Manual Installation (Legacy)
+
+If you prefer not to use Nix:
+
 1. **Clone the repository:**
 
 ```bash
@@ -49,7 +92,18 @@ git clone https://github.com/vasumv/dotfiles ~/dotfiles
 cd ~/dotfiles
 ```
 
-2. **Run the setup script:**
+2. **Install dependencies manually:**
+
+```bash
+# On Arch Linux
+sudo pacman -S hyprland hyprpaper hyprlock waybar fuzzel tmux vim \
+               kitty dolphin brightnessctl playerctl \
+               pipewire wireplumber pavucontrol \
+               ttf-font-awesome ttf-jetbrains-mono-nerd \
+               network-manager-applet
+```
+
+3. **Run the setup script:**
 
 ```bash
 chmod +x setup.sh
@@ -109,7 +163,27 @@ The setup script creates the following symlinks:
 
 ## Updating
 
+### With Nix Home Manager
+
 To update your configurations:
+
+```bash
+cd ~/dotfiles
+git pull
+home-manager switch --flake .#vasu
+```
+
+To add new packages, edit `home.nix`:
+```nix
+home.packages = with pkgs; [
+  # ... existing packages
+  neofetch  # Add your package here
+];
+```
+
+Then run `home-manager switch --flake .#vasu`.
+
+### With Manual Installation
 
 ```bash
 cd ~/dotfiles
@@ -124,6 +198,18 @@ cd ~/dotfiles
 git add .
 git commit -m "Update configuration"
 git push
+```
+
+## Rollback (Nix Only)
+
+One of the benefits of Home Manager is easy rollback:
+
+```bash
+# List all generations
+home-manager generations
+
+# Rollback to a specific generation
+home-manager switch --switch-generation <number>
 ```
 
 ## Troubleshooting
