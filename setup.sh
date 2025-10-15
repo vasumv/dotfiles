@@ -52,5 +52,11 @@ for file in "$DOTFILES_DIR/hyprland/waybar"/*; do
     fi
 done
 
+# Fuzzel configuration
+mkdir -p $HOME/.config/fuzzel
+ln -sf "$DOTFILES_DIR/hyprland/fuzzel/fuzzel.ini" "$HOME/.config/fuzzel/fuzzel.ini"
+echo "Linking hyprlock configuration..."
+echo "  ✓ ~/.config/fuzzel/fuzzel.ini -> $DOTFILES_DIR/hyprland/fuzzel/fuzzel.ini"
+
 echo ""
 echo "Dotfiles setup complete!"
