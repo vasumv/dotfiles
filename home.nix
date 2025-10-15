@@ -22,8 +22,18 @@
     hyprland
     hyprpaper
     hyprlock
+    hyprshot
     waybar
     fuzzel
+
+    # Screenshot dependencies
+    grim      # Screenshot utility for Wayland
+    slurp     # Select a region in Wayland
+    jq        # JSON processor
+
+    # Notifications
+    swaynotificationcenter  # Notification daemon for Wayland with notification center
+    libnotify              # For notify-send command
 
     # Terminal and tools
     kitty
