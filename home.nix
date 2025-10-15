@@ -10,6 +10,9 @@
   # introduces backwards incompatible changes.
   home.stateVersion = "24.05";
 
+  # Allow unfree packages (like Slack)
+  nixpkgs.config.allowUnfree = true;
+
   # Let Home Manager install and manage itself
   programs.home-manager.enable = true;
 
@@ -24,7 +27,7 @@
 
     # Terminal and tools
     kitty
-    dolphin
+    kdePackages.dolphin  # Qt6-based Dolphin file manager
     fish
     tmux
     vim
@@ -41,7 +44,7 @@
 
     # Fonts (critical for Waybar icons)
     font-awesome
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    nerd-fonts.jetbrains-mono
 
     # Additional tools referenced in configs
     slack
