@@ -66,12 +66,14 @@ Or system-wide in `/etc/nix/nix.conf` (requires sudo).
 ```bash
 git clone https://github.com/vasumv/dotfiles ~/dotfiles
 cd ~/dotfiles
-nix run home-manager/master -- switch --flake .#vasu
+# Use -b backup to automatically back up existing config files
+nix run home-manager/master -- switch --flake .#vasu -b backup
 ```
 
 This will:
 - Install all required packages (Hyprland, Waybar, fonts, etc.)
 - Create symbolic links for all configuration files
+- Automatically back up any existing config files with `.backup` extension
 - Set up your entire environment in one command
 
 4. **Update after making changes:**
@@ -80,6 +82,8 @@ This will:
 cd ~/dotfiles
 home-manager switch --flake .#vasu
 ```
+
+**Note:** The `-b backup` flag is only needed for first-time installation when you have existing config files.
 
 ### Manual Installation (Legacy)
 
@@ -182,6 +186,11 @@ home.packages = with pkgs; [
 ```
 
 Then run `home-manager switch --flake .#vasu`.
+
+**Important:** Some packages have specific naming conventions in Nix:
+- KDE apps: `kdePackages.dolphin` (not `dolphin`)
+- Nerd fonts: `nerd-fonts.jetbrains-mono` (not `nerdfonts.override`)
+- Unfree software (like Slack): Requires `nixpkgs.config.allowUnfree = true` in `home.nix`
 
 ### With Manual Installation
 

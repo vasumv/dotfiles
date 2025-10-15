@@ -28,7 +28,8 @@ experimental-features = nix-command flakes
 ```bash
 git clone https://github.com/vasumv/dotfiles ~/dotfiles
 cd ~/dotfiles
-nix run home-manager/master -- switch --flake .#vasu
+# Use -b backup to automatically back up existing config files
+nix run home-manager/master -- switch --flake .#vasu -b backup
 ```
 
 **Update configuration after changes:**
@@ -36,6 +37,8 @@ nix run home-manager/master -- switch --flake .#vasu
 cd ~/dotfiles
 home-manager switch --flake .#vasu
 ```
+
+**Note:** On first installation, use `-b backup` flag to automatically backup existing config files. Home Manager will rename them with a `.backup` extension.
 
 **Rollback to previous generation:**
 ```bash
@@ -216,6 +219,11 @@ home.packages = with pkgs; [
 ```
 
 Then apply: `home-manager switch --flake .#vasu`
+
+**Important package naming conventions:**
+- KDE packages: Use `kdePackages.dolphin` (not plain `dolphin`)
+- Nerd fonts: Use `nerd-fonts.jetbrains-mono` (not `nerdfonts.override`)
+- Unfree packages: Require `nixpkgs.config.allowUnfree = true` in `home.nix`
 
 ### Adding New Dotfiles
 To manage a new config file, add to `home.file` in `home.nix`:

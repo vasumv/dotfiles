@@ -100,9 +100,20 @@
     # interactiveShellInit = ''
     #   # Fish-specific interactive commands
     # '';
-    # shellAliases = {
-    #   ll = "ls -la";
-    # };
+    shellAliases = {
+      ll = "ls -la";
+      ta = "tmux a -t";
+    };
+  };
+
+  # Zoxide - smarter cd command that learns your habits
+  programs.zoxide = {
+    enable = true;
+    enableFishIntegration = true;
+    options = [ "--cmd c" ];
+    # Use 'c' to jump to directories
+    # e.g., "c dotfiles" will jump to ~/dotfiles after you've visited it
+    # 'ci' for interactive selection
   };
 
   programs.bash = {
