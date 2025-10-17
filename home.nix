@@ -90,9 +90,8 @@
   # Optional: Enable some useful programs with Home Manager modules
   programs.git = {
     enable = true;
-    # Uncomment and customize if you want Home Manager to manage git config:
-    # userName = "Your Name";
-    # userEmail = "your.email@example.com";
+    userName = "Vasu Vikram";
+    userEmail = "vvikram@andrew.cmu.edu";
   };
 
   programs.fish = {
