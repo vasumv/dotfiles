@@ -9,18 +9,18 @@ DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 echo "Setting up dotfiles from: $DOTFILES_DIR"
 echo ""
 
-# Tmux configuration
-echo "Linking tmux configuration..."
-ln -sf "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
-echo "  ✓ ~/.tmux.conf -> $DOTFILES_DIR/tmux/tmux.conf"
+# # Tmux configuration
+# echo "Linking tmux configuration..."
+# ln -sf "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
+# echo "  ✓ ~/.tmux.conf -> $DOTFILES_DIR/tmux/tmux.conf"
 
-# Vim configuration
-echo "Linking vim configuration..."
-ln -sf "$DOTFILES_DIR/vim/vimrc.local" "$HOME/.vimrc.local"
-echo "  ✓ ~/.vimrc.local -> $DOTFILES_DIR/vim/vimrc.local"
+# # Vim configuration
+# echo "Linking vim configuration..."
+# ln -sf "$DOTFILES_DIR/vim/vimrc.local" "$HOME/.vimrc.local"
+# echo "  ✓ ~/.vimrc.local -> $DOTFILES_DIR/vim/vimrc.local"
 
-ln -sf "$DOTFILES_DIR/vim/vimrc.bundles.local" "$HOME/.vimrc.bundles.local"
-echo "  ✓ ~/.vimrc.bundles.local -> $DOTFILES_DIR/vim/vimrc.bundles.local"
+# ln -sf "$DOTFILES_DIR/vim/vimrc.bundles.local" "$HOME/.vimrc.bundles.local"
+# echo "  ✓ ~/.vimrc.bundles.local -> $DOTFILES_DIR/vim/vimrc.bundles.local"
 
 # Hyprland configuration
 echo "Linking hyprland configuration..."

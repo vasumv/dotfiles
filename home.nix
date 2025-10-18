@@ -90,8 +90,13 @@
     config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/fuzzel/fuzzel.ini";
 
   # --- Wallpapers (still fine to copy, they don’t change often) ---
-  "Pictures/wallpapers/spire.png".source = ./hyprland/wallpapers/spire.png;
-  "Pictures/wallpapers/spire2.png".source = ./hyprland/wallpapers/spire2.png;
+
+  # Wallpapers
+  "Pictures/wallpapers/spire.png".source =
+  config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/wallpapers/spire.png";
+
+"Pictures/wallpapers/spire2.png".source =
+  config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/wallpapers/spire2.png";
 
   # --- Tmux configuration ---
   ".tmux.conf".source =
