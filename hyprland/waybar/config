@@ -14,6 +14,7 @@
         "tray",
         "memory",
         "network",
+        "backlight",
         "wireplumber",
         "battery",
         "custom/power"
@@ -90,6 +91,15 @@
         },
         "on-click": "pamixer -t",
         "scroll-step": 1
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "on-scroll-up": "brightnessctl set +5%",
+        "on-scroll-down": "brightnessctl set 5%-",
+        "tooltip": true,
+        "tooltip-format": "Brightness: {percent}%"
     },
     "custom/logo": {
         "format": "  ",
