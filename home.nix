@@ -62,32 +62,48 @@
 
     # Additional tools referenced in configs
     slack
+    # Custom Google Chrome wrapper with flags
+    (pkgs.writeShellScriptBin "google-chrome" ''
+      exec ${pkgs.google-chrome}/bin/google-chrome-stable \
+        --disable-features=WaylandWpColorManagerV1 "$@"
+    '')
   ];
 
   # Symlink dotfiles to their proper locations
   home.file = {
-    # Hyprland configurations
-    ".config/hypr/hyprland.conf".source = ./hyprland/hyprland.conf;
-    ".config/hypr/hyprpaper.conf".source = ./hyprland/hyprpaper.conf;
-    ".config/hypr/hyprlock.conf".source = ./hyprland/hyprlock.conf;
+  # --- Hyprland configurations (live symlinks) ---
+  ".config/hypr/hyprland.conf".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/hyprland.conf";
 
-    # Waybar configurations
-    ".config/waybar".source = ./hyprland/waybar;
+  ".config/hypr/hyprpaper.conf".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/hyprpaper.conf";
 
-    # Fuzzel configuration
-    ".config/fuzzel/fuzzel.ini".source = ./hyprland/fuzzel/fuzzel.ini;
+  ".config/hypr/hyprlock.conf".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/hyprlock.conf";
 
-    # Wallpapers
-    "Pictures/wallpapers/spire.png".source = ./hyprland/wallpapers/spire.png;
-    "Pictures/wallpapers/spire2.png".source = ./hyprland/wallpapers/spire2.png;
+  # --- Waybar configuration (directory symlink, reloads instantly) ---
+  ".config/waybar".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/waybar";
 
-    # Tmux configuration
-    ".tmux.conf".source = ./tmux/tmux.conf;
+  # --- Fuzzel configuration ---
+  ".config/fuzzel/fuzzel.ini".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/fuzzel/fuzzel.ini";
 
-    # Vim configurations
-    ".vimrc.local".source = ./vim/vimrc.local;
-    ".vimrc.bundles.local".source = ./vim/vimrc.bundles.local;
-  };
+  # --- Wallpapers (still fine to copy, they don’t change often) ---
+  "Pictures/wallpapers/spire.png".source = ./hyprland/wallpapers/spire.png;
+  "Pictures/wallpapers/spire2.png".source = ./hyprland/wallpapers/spire2.png;
+
+  # --- Tmux configuration ---
+  ".tmux.conf".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/tmux/tmux.conf";
+
+  # --- Vim configurations ---
+  ".vimrc.local".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/vim/vimrc.local";
+  ".vimrc.bundles.local".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/vim/vimrc.bundles.local";
+};
+
 
   # Optional: Enable some useful programs with Home Manager modules
   programs.git = {
