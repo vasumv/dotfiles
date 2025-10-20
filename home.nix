@@ -44,6 +44,7 @@
     fish
     tmux
     vim
+    silver-searcher
 
     # System utilities
     less
@@ -67,6 +68,8 @@
       exec ${pkgs.google-chrome}/bin/google-chrome-stable \
         --disable-features=WaylandWpColorManagerV1 "$@"
     '')
+
+    zoxide
   ];
 
   # Symlink dotfiles to their proper locations
@@ -126,17 +129,17 @@
       set -x GDK_DPI_SCALE 0.5
       set -x QT_AUTO_SCREEN_SCALE_FACTOR 1
       set -x QT_SCALE_FACTOR 1
+      if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+          . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+      end
     '';
-
-    # You can add more fish config here:
-    # interactiveShellInit = ''
-    #   # Fish-specific interactive commands
-    # '';
     shellAliases = {
       ll = "ls -la";
       ta = "tmux a -t";
     };
   };
+
+
 
   # Zoxide - smarter cd command that learns your habits
   programs.zoxide = {
