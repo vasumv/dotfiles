@@ -27,9 +27,10 @@
     fuzzel
 
     # Screenshot dependencies
-    grim      # Screenshot utility for Wayland
-    slurp     # Select a region in Wayland
-    jq        # JSON processor
+    # grim      # Screenshot utility for Wayland
+    # slurp     # Select a region in Wayland
+    # jq        # JSON processor
+    wl-clipboard
 
     # Notifications
     swaynotificationcenter  # Notification daemon for Wayland with notification center
@@ -40,12 +41,14 @@
     kdePackages.dolphin  # Qt6-based Dolphin file manager
     fish
     tmux
-    vim
+    vim-full
+    silver-searcher
 
     # System utilities
     brightnessctl
     playerctl
     networkmanagerapplet
+    networkmanager-openconnect
 
     # Audio
     pipewire
@@ -60,32 +63,45 @@
     slack
   ];
 
-  # Symlink dotfiles to their proper locations
   home.file = {
-    # Hyprland configurations
-    ".config/hypr/hyprland.conf".source = ./hyprland/hyprland.conf;
-    ".config/hypr/hyprpaper.conf".source = ./hyprland/hyprpaper.conf;
-    ".config/hypr/hyprlock.conf".source = ./hyprland/hyprlock.conf;
+    # --- Hyprland configurations (live symlinks) ---
+    ".config/hypr/hyprland.conf".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/hyprland.conf";
 
-    # Waybar configurations
-    ".config/waybar/config.jsonc".source = ./hyprland/waybar/config.jsonc;
-    ".config/waybar/style.css".source = ./hyprland/waybar/style.css;
-    ".config/waybar/README.md".source = ./hyprland/waybar/README.md;
+    ".config/hypr/hyprpaper.conf".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/hyprpaper.conf";
 
-    # Fuzzel configuration
-    ".config/fuzzel/fuzzel.ini".source = ./hyprland/fuzzel/fuzzel.ini;
+    ".config/hypr/hyprlock.conf".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/hyprlock.conf";
+
+    # --- Waybar configuration (directory symlink, reloads instantly) ---
+    ".config/waybar".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/waybar";
+
+    # --- Fuzzel configuration ---
+    ".config/fuzzel/fuzzel.ini".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/fuzzel/fuzzel.ini";
+
+    # --- Wallpapers (still fine to copy, they don’t change often) ---
 
     # Wallpapers
-    "Pictures/wallpapers/spire.png".source = ./hyprland/wallpapers/spire.png;
-    "Pictures/wallpapers/spire2.png".source = ./hyprland/wallpapers/spire2.png;
+    "Pictures/wallpapers/spire.png".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/wallpapers/spire.png";
 
-    # Tmux configuration
-    ".tmux.conf".source = ./tmux/tmux.conf;
+    "Pictures/wallpapers/spire2.png".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/wallpapers/spire2.png";
 
-    # Vim configurations
-    ".vimrc.local".source = ./vim/vimrc.local;
-    ".vimrc.bundles.local".source = ./vim/vimrc.bundles.local;
+    # --- Tmux configuration ---
+    ".tmux.conf".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/tmux/tmux.conf";
+
+    # --- Vim configurations ---
+    ".vimrc.local".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/vim/vimrc.local";
+    ".vimrc.bundles.local".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/vim/vimrc.bundles.local";
   };
+
 
   # Optional: Enable some useful programs with Home Manager modules
   programs.git = {
