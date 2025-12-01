@@ -57,60 +57,82 @@
     wireplumber
     pavucontrol
 
+    # Zip
+    zip
+    unzip
+
     # Fonts (critical for Waybar icons)
     font-awesome
     nerd-fonts.jetbrains-mono
 
     # Additional tools referenced in configs
-    slack
+    (pkgs.writeShellScriptBin "slack" ''
+      exec ${pkgs.slack}/bin/slack \
+        --ozone-platform-hint=wayland \
+        --enable-features=WaylandWindowDecorations,UseOzonePlatform "$@"
+    '')
     # Custom Google Chrome wrapper with flags
     (pkgs.writeShellScriptBin "google-chrome" ''
       exec ${pkgs.google-chrome}/bin/google-chrome-stable \
         --disable-features=WaylandWpColorManagerV1 "$@"
     '')
+    # VS Code (Wayland-native)
+    (pkgs.writeShellScriptBin "code" ''
+      exec ${pkgs.vscode}/bin/code \
+        --ozone-platform-hint=wayland \
+        --enable-features=WaylandWindowDecorations,UseOzonePlatform "$@"
+    '')
 
     zoxide
+
+    # Python stuff
+    poetry
+    uv
+
+    nodejs
   ];
 
   # Symlink dotfiles to their proper locations
   home.file = {
   # --- Hyprland configurations (live symlinks) ---
   ".config/hypr/hyprland.conf".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/hyprland.conf";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/hyprland.conf";
 
   ".config/hypr/hyprpaper.conf".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/hyprpaper.conf";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/hyprpaper.conf";
 
   ".config/hypr/hyprlock.conf".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/hyprlock.conf";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/hyprlock.conf";
 
   # --- Waybar configuration (directory symlink, reloads instantly) ---
+
   ".config/waybar".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/waybar";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/waybar";
+  ".config/waybar".force = true;
 
   # --- Fuzzel configuration ---
   ".config/fuzzel/fuzzel.ini".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/fuzzel/fuzzel.ini";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/fuzzel/fuzzel.ini";
 
   # --- Wallpapers (still fine to copy, they don’t change often) ---
 
   # Wallpapers
   "Pictures/wallpapers/spire.png".source =
-  config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/wallpapers/spire.png";
+  config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/wallpapers/spire.png";
 
 "Pictures/wallpapers/spire2.png".source =
-  config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/hyprland/wallpapers/spire2.png";
+  config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/hyprland/wallpapers/spire2.png";
 
   # --- Tmux configuration ---
   ".tmux.conf".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/tmux/tmux.conf";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/tmux/tmux.conf";
 
   # --- Vim configurations ---
   ".vimrc.local".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/vim/vimrc.local";
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/vim/vimrc.local";
   ".vimrc.bundles.local".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/vasumv/dotfiles/vim/vimrc.bundles.local";
-};
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/vim/vimrc.bundles.local";
+  };
 
 
   # Optional: Enable some useful programs with Home Manager modules
@@ -129,6 +151,7 @@
       set -x GDK_DPI_SCALE 0.5
       set -x QT_AUTO_SCREEN_SCALE_FACTOR 1
       set -x QT_SCALE_FACTOR 1
+      set -x ELECTRON_OZONE_PLATFORM_HINT wayland
       if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
           . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
       end
