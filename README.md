@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal configuration files for Linux development environment with Hyprland.
+Personal configuration files for a Hyprland desktop on Arch Linux.
 
 ## Overview
 
@@ -10,208 +10,137 @@ This repository contains configuration files for:
 - **Hyprpaper**: Wallpaper utility
 - **Hyprlock**: Screen locker
 - **Fuzzel**: Application launcher
+- **Gammastep**: Night color temperature
+- **Fish**: Shell
 - **Tmux**: Terminal multiplexer
 - **Vim**: Text editor
 
-## Prerequisites
+## How This Setup Works
 
-### Required Packages
+The setup uses two package managers, and they do different jobs:
 
-Install the following packages on Arch Linux:
+- **pacman** provides the desktop. GDM starts Hyprland from `/usr/bin` with `PATH=/usr/local/bin:/usr/bin`, so everything launched from `hyprland.conf` has to be installed through pacman or the AUR.
+- **Nix Home Manager** provides config symlinks, fish, zoxide and tools used from a terminal.
+
+`home.nix` also installs Hyprland, Waybar, kitty and others, but the session doesn't use those copies. They do not replace the pacman packages:
+- Nix's kitty crashes on this Arch install with an EGL error, because it can't initialize graphics without a wrapper such as nixGL.
+- Nix's hyprlock uses its own PAM build, which is missing modules that Arch's PAM config references, such as `pam_systemd_home.so`. Don't rely on it as a screen locker.
+
+## Branches
+
+`sd` is the current branch for this laptop. `master` and `cmu-desktop` have diverged from it and are missing recent changes, including the volume script and gammastep config.
+
+## Setting Up a New Laptop
+
+These steps are based on the current laptop and haven't been tested on a fresh install. Use the username `vasu`, because `/home/vasu` is hard-coded in `home.nix` and `hyprland.conf`.
+
+1. **Install packages:**
 
 ```bash
-# Core Hyprland environment
-sudo pacman -S hyprland hyprpaper hyprlock waybar fuzzel
-
-# Terminal and editor
-sudo pacman -S tmux vim
-
-# Fonts (for Waybar icons and UI)
-sudo pacman -S ttf-font-awesome ttf-jetbrains-mono-nerd
+sudo pacman -S gdm hyprland hyprpaper hyprlock waybar fuzzel wofi kitty fish tmux gvim \
+  grim slurp wl-clipboard gammastep brightnessctl playerctl libnotify \
+  networkmanager network-manager-applet bluez bluez-utils blueman \
+  pipewire pipewire-pulse wireplumber xdg-desktop-portal-hyprland \
+  ttf-jetbrains-mono-nerd woff2-font-awesome \
+  swaync dolphin pavucontrol
 ```
 
-### Optional Dependencies
+Then install `hyprshot` and `slack-desktop`, using an AUR helper for anything pacman doesn't have. The current laptop runs `hyprland-git` from the AUR, so plain `hyprland` will be a different version.
+
+2. **Enable services and set your shell:**
 
 ```bash
-# For Waybar modules
-sudo pacman -S brightnessctl bluez bluez-utils network-manager-applet
-
-# Audio control
-sudo pacman -S pavucontrol wireplumber pipewire
+sudo systemctl enable gdm NetworkManager bluetooth
+chsh -s /usr/bin/fish
 ```
 
-## Installation
-
-### Using Nix Home Manager (Recommended)
-
-This is the recommended method for reproducible, declarative environment management.
-
-1. **Install Nix** (if not already installed):
+3. **Install Nix:**
 
 ```bash
 sh <(curl -L https://nixos.org/nix/install) --daemon
 ```
 
-2. **Enable flakes:**
+4. **Enable flakes** by adding this to `~/.config/nix/nix.conf`:
 
-Add to `~/.config/nix/nix.conf` (create if it doesn't exist):
 ```
 experimental-features = nix-command flakes
 ```
 
-Or system-wide in `/etc/nix/nix.conf` (requires sudo).
-
-3. **Clone and activate:**
+5. **Clone and activate:**
 
 ```bash
-git clone https://github.com/vasumv/dotfiles ~/dotfiles
+git clone -b sd https://github.com/vasumv/dotfiles ~/dotfiles
 cd ~/dotfiles
 # Use -b backup to automatically back up existing config files
 nix run home-manager/master -- switch --flake .#vasu -b backup
 ```
 
-This will:
-- Install all required packages (Hyprland, Waybar, fonts, etc.)
-- Create symbolic links for all configuration files
-- Automatically back up any existing config files with `.backup` extension
-- Set up your entire environment in one command
+`home-manager/master` is the latest version, while `flake.lock` pins packages from October 2025, so this step may need `nix flake update` first.
 
-4. **Update after making changes:**
+6. **Update machine-specific settings:**
+   - Monitors: the `monitor =` lines in `hyprland/hyprland.conf`
+   - Wallpaper output: the `wallpaper =` lines in `hyprland/hyprpaper.conf`
+   - Gammastep location: the `gammastep` line in `hyprland/hyprland.conf`
 
-```bash
-cd ~/dotfiles
-home-manager switch --flake .#vasu
-```
+7. **Reboot** and choose Hyprland at the GDM login screen.
 
-**Note:** The `-b backup` flag is only needed for first-time installation when you have existing config files.
+## Known Issues on the Current Laptop
 
-### Manual Installation (Legacy)
+These commands are only installed through Nix here, so the Hyprland session can't find them:
+- `swaync`: isn't running, so there is no notification daemon
+- `hyprshot`: the screenshot keybindings that use it can't find it
+- `dolphin`: the file manager keybinding can't find it
+- `pavucontrol`: works from a terminal, but not when launched from the session
 
-If you prefer not to use Nix:
-
-1. **Clone the repository:**
-
-```bash
-git clone https://github.com/vasumv/dotfiles ~/dotfiles
-cd ~/dotfiles
-```
-
-2. **Install dependencies manually:**
-
-```bash
-# On Arch Linux
-sudo pacman -S hyprland hyprpaper hyprlock waybar fuzzel tmux vim \
-               kitty dolphin brightnessctl playerctl \
-               pipewire wireplumber pavucontrol \
-               ttf-font-awesome ttf-jetbrains-mono-nerd \
-               network-manager-applet
-```
-
-3. **Run the setup script:**
-
-```bash
-chmod +x setup.sh
-./setup.sh
-```
-
-The setup script will:
-- Create symbolic links from this repository to your home directory
-- Create necessary config directories if they don't exist
-- Link all configuration files to their appropriate locations
+Installing them through pacman or the AUR fixes this.
 
 ## What Gets Linked
 
-The setup script creates the following symlinks:
+Home Manager creates these symlinks, defined in `home.nix`:
 
-### Tmux
 - `~/.tmux.conf` → `tmux/tmux.conf`
-
-### Vim
 - `~/.vimrc.local` → `vim/vimrc.local`
 - `~/.vimrc.bundles.local` → `vim/vimrc.bundles.local`
-
-### Hyprland
 - `~/.config/hypr/hyprland.conf` → `hyprland/hyprland.conf`
 - `~/.config/hypr/hyprpaper.conf` → `hyprland/hyprpaper.conf`
 - `~/.config/hypr/hyprlock.conf` → `hyprland/hyprlock.conf`
-
-### Waybar
-- `~/.config/waybar/config` → `hyprland/waybar/config`
-- `~/.config/waybar/config.jsonc` → `hyprland/waybar/config.jsonc`
-- `~/.config/waybar/style.css` → `hyprland/waybar/style.css`
-- `~/.config/waybar/README.md` → `hyprland/waybar/README.md`
-
-### Fuzzel
+- `~/.config/waybar` → `hyprland/waybar`
 - `~/.config/fuzzel/fuzzel.ini` → `hyprland/fuzzel/fuzzel.ini`
-
-### Wallpapers
+- `~/.config/gammastep/config.ini` → `hyprland/gammastep/config.ini`
 - `~/Pictures/wallpapers/spire.png` → `hyprland/wallpapers/spire.png`
 - `~/Pictures/wallpapers/spire2.png` → `hyprland/wallpapers/spire2.png`
 
-## Post-Installation
+The links resolve to this repository, so edits take effect without a rebuild and show up in `git status`.
 
-### First Time Setup
+Fish config is generated from `programs.fish` in `home.nix`.
 
-1. **Start Hyprland:**
-   - Log out and select Hyprland from your display manager
-   - Or run `Hyprland` from a TTY
+`setup.sh` is the older way to create these links without Home Manager. It also links `fish/config.fish`.
 
-2. **Verify everything works:**
-   - Waybar should appear at the top of your screen
-   - Wallpaper should be set via hyprpaper
-   - Try opening Fuzzel (usually Super+D or check keybindings)
+## Keybindings
 
-3. **Review keybindings:**
-   - Check `hyprland/hyprland.conf` for custom keybindings
-   - Default Super key bindings should be configured
+All keybindings are in `hyprland/hyprland.conf`. The launcher is Super+Space.
 
 ## Updating
 
-### With Nix Home Manager
-
-To update your configurations:
+To apply changes to `home.nix`:
 
 ```bash
 cd ~/dotfiles
-git pull
 home-manager switch --flake .#vasu
 ```
 
-To add new packages, edit `home.nix`:
-```nix
-home.packages = with pkgs; [
-  # ... existing packages
-  neofetch  # Add your package here
-];
-```
+The `-b backup` flag is only needed when existing files are in the way.
 
-Then run `home-manager switch --flake .#vasu`.
+To add a tool for use in a terminal, add it to `home.packages` in `home.nix`. To add something the desktop launches, install it through pacman.
 
 **Important:** Some packages have specific naming conventions in Nix:
 - KDE apps: `kdePackages.dolphin` (not `dolphin`)
 - Nerd fonts: `nerd-fonts.jetbrains-mono` (not `nerdfonts.override`)
 - Unfree software (like Slack): Requires `nixpkgs.config.allowUnfree = true` in `home.nix`
 
-### With Manual Installation
+## Rollback
 
-```bash
-cd ~/dotfiles
-git pull
-./setup.sh  # Re-run to update symlinks if needed
-```
-
-Since the files are symlinked, any changes you make to files in `~/.config/` will automatically update the files in this repository. Remember to commit your changes:
-
-```bash
-cd ~/dotfiles
-git add .
-git commit -m "Update configuration"
-git push
-```
-
-## Rollback (Nix Only)
-
-One of the benefits of Home Manager is easy rollback:
+Home Manager generations cover the Nix side only, not pacman packages:
 
 ```bash
 # List all generations
@@ -223,6 +152,10 @@ home-manager switch --switch-generation <number>
 
 ## Troubleshooting
 
+### A keybinding or autostart app does nothing
+- Check that the session can find it: `PATH=/usr/local/bin:/usr/bin command -v <name>`
+- If nothing prints, install it through pacman
+
 ### Waybar not showing
 - Check if Waybar is running: `pgrep waybar`
 - Restart Waybar: `killall waybar && waybar &`
@@ -231,16 +164,19 @@ home-manager switch --switch-generation <number>
 - Verify hyprpaper is running: `pgrep hyprpaper`
 - Check wallpaper paths in `hyprland/hyprpaper.conf`
 
-### Permission issues
-- Ensure setup.sh is executable: `chmod +x setup.sh`
+### Screen color not changing
+- Check that gammastep is running: `pgrep gammastep`
+- Print the current period and temperature: `gammastep -p -m dummy -l 32.68:-117.18`
+- The tint only applies at night. Set `temp-night` in `hyprland/gammastep/config.ini`, then restart gammastep
 
 ## Customization
 
-Feel free to modify any configuration files to suit your preferences. Key files to customize:
+Key files to customize:
 
 - **Hyprland keybindings**: `hyprland/hyprland.conf`
 - **Waybar appearance**: `hyprland/waybar/style.css`
-- **Waybar modules**: `hyprland/waybar/config`
+- **Waybar modules**: `hyprland/waybar/config.jsonc`
+- **Night temperature**: `hyprland/gammastep/config.ini`
 - **Tmux keybindings**: `tmux/tmux.conf`
 - **Vim settings**: `vim/vimrc.local`
 
