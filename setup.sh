@@ -58,6 +58,12 @@ ln -sf "$DOTFILES_DIR/hyprland/fuzzel/fuzzel.ini" "$HOME/.config/fuzzel/fuzzel.i
 echo "Linking fuzzel configuration..."
 echo "  ✓ ~/.config/fuzzel/fuzzel.ini -> $DOTFILES_DIR/hyprland/fuzzel/fuzzel.ini"
 
+# Gammastep configuration
+echo "Linking gammastep configuration..."
+mkdir -p "$HOME/.config/gammastep"
+ln -sf "$DOTFILES_DIR/hyprland/gammastep/config.ini" "$HOME/.config/gammastep/config.ini"
+echo "  ✓ ~/.config/gammastep/config.ini -> $DOTFILES_DIR/hyprland/gammastep/config.ini"
+
 # Fish configuration
 echo "Linking fish configuration..."
 mkdir -p "$HOME/.config/fish"

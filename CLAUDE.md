@@ -78,6 +78,7 @@ Configs are symlinked by Home Manager (defined in `home.nix`):
 - `hyprland/*.conf` → `~/.config/hypr/*.conf`
 - `hyprland/waybar/*` → `~/.config/waybar/*`
 - `hyprland/fuzzel/fuzzel.ini` → `~/.config/fuzzel/fuzzel.ini`
+- `hyprland/gammastep/config.ini` → `~/.config/gammastep/config.ini`
 - `hyprland/wallpapers/*` → `~/Pictures/wallpapers/*`
 
 **Note:** With Home Manager, symlinks are managed declaratively. Don't manually create/delete symlinks; update `home.nix` instead.

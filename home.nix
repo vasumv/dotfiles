@@ -82,6 +82,10 @@
     ".config/fuzzel/fuzzel.ini".source =
       config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/fuzzel/fuzzel.ini";
 
+    # --- Gammastep configuration ---
+    ".config/gammastep/config.ini".source =
+      config.lib.file.mkOutOfStoreSymlink "/home/vasu/dotfiles/hyprland/gammastep/config.ini";
+
     # --- Wallpapers (still fine to copy, they don’t change often) ---
 
     # Wallpapers
